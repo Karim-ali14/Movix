@@ -1,4 +1,4 @@
-package com.karimali.movix.ui.theme
+package com.karimali.movix.core.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
