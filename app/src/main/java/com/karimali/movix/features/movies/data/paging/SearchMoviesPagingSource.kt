@@ -26,7 +26,7 @@ class SearchMoviesPagingSource(
             val endReached = raw.isEmpty() || page >= (response.totalPages ?: page)
 
             LoadResult.Page(
-                data = raw.mapNotNull { it.toDomainOrNull() },
+                data = raw.mapNotNull { it.toDomainOrNull() }.distinctBy { it.id },
                 prevKey = if (page == FIRST_PAGE) null else page - 1,
                 nextKey = if (endReached) null else page + 1,
             )
