@@ -1,3 +1,17 @@
 <resources>
     <string name="app_name">Movix</string>
+    <string name="clear">Clear</string>
+
+    <string name="error_no_internet">No internet connection. Check your network and try again.</string>
+    <string name="error_timeout">The request timed out. Please try again.</string>
+    <string name="error_unauthorized">Authentication failed. Check your TMDb token.</string>
+    <string name="error_not_found">We couldn\'t find what you were looking for.</string>
+    <string name="error_rate_limited">Too many requests. Please wait a moment.</string>
+    <string name="error_server">Server error (%1$d). Please try again later.</string>
+    <string name="error_unknown">Something went wrong.</string>
+    <string name="search_hint">Search movies</string>
+    <string name="empty_movies">No movies to show</string>
+    <string name="empty_search">No results for \"%1$s\"</string>
+    <string name="retry">Retry</string>
+    <string name="showing_saved_movies">Showing saved movies</string>
 </resources>

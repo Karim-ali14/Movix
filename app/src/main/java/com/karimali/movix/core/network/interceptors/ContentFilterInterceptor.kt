@@ -14,16 +14,16 @@ class ContentFilterInterceptor @Inject constructor() : Interceptor {
             path.endsWith(AppRouter.DISCOVER_MOVIES) -> {
                 // Discover endpoint supports all mandatory filtering conditions
                 request.url.newBuilder()
-                    .addQueryParameter("include_adult", "false")
-                    .addQueryParameter("certification_country", "US")
-                    .addQueryParameter("certification.lte", "PG-13")
+                    .setQueryParameter("include_adult", "false")
+                    .setQueryParameter("certification_country", "US")
+                    .setQueryParameter("certification.lte", "PG-13")
                     .build()
             }
 
             path.endsWith(AppRouter.SEARCH_MOVIES) -> {
                 // Search endpoint only supports include_adult and does not support certification parameters
                 request.url.newBuilder()
-                    .addQueryParameter("include_adult", "false")
+                    .setQueryParameter("include_adult", "false")
                     .build()
             }
 
