@@ -2,6 +2,7 @@ package com.karimali.movix.testutil
 
 import com.karimali.movix.features.movies.data.datasource.local.entity.MovieEntity
 import com.karimali.movix.features.movies.data.datasource.remote.dto.MovieDto
+import com.karimali.movix.features.movies.domain.model.Movie
 
 fun movieDto(
     id: Int? = 1,
@@ -46,3 +47,10 @@ fun movieEntity(
     page = page,
     position = position
 )
+
+fun movie(
+    id: Int = 1,
+    title: String = "Movie $id",
+    posterUrl: String? = "https://image.tmdb.org/t/p/w500/poster.jpg",
+    releaseDate: String? = "2024-05-01",
+) = Movie(id = id, title = title, posterUrl = posterUrl, releaseDate = releaseDate)
