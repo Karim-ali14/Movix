@@ -1,4 +1,4 @@
-package com.karimali.movix.testutil
+package com.karimali.movix.core.testutil
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi

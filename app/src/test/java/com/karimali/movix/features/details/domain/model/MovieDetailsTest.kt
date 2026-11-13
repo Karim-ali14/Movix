@@ -1,6 +1,6 @@
 package com.karimali.movix.features.details.domain.model
 
-import com.karimali.movix.testutil.movieDetails
+import com.karimali.movix.core.testutil.movieDetails
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Test

@@ -13,7 +13,7 @@ import com.karimali.movix.features.movies.data.datasource.local.entity.MovieEnti
 import com.karimali.movix.features.movies.data.datasource.local.entity.RemoteKeysEntity
 import com.karimali.movix.features.movies.data.datasource.remote.MoviesRemoteDataSource
 import com.karimali.movix.features.movies.data.datasource.remote.dto.MoviesResponseDto
-import com.karimali.movix.testutil.movieDto
+import com.karimali.movix.core.testutil.movieDto
 import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.coVerify
