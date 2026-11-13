@@ -1,8 +1,6 @@
 package com.karimali.movix.features.movies.presentation.viewmodel
 
-
 import androidx.paging.PagingData
-import androidx.paging.testing.asSnapshot
 import app.cash.turbine.test
 import com.karimali.movix.features.movies.domain.usecase.FetchMoviesUseCase
 import com.karimali.movix.features.movies.domain.usecase.SearchMoviesUseCase
@@ -10,7 +8,6 @@ import com.karimali.movix.features.movies.presentation.contract.MoviesEffect
 import com.karimali.movix.features.movies.presentation.contract.MoviesIntent
 import com.karimali.movix.features.movies.presentation.contract.MoviesState
 import com.karimali.movix.testutil.MainDispatcherRule
-import com.karimali.movix.testutil.movie
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
