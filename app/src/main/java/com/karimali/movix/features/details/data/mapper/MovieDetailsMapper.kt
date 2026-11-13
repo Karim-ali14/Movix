@@ -6,34 +6,33 @@ import com.karimali.movix.features.details.data.datasource.local.entity.MovieDet
 import com.karimali.movix.features.details.data.datasource.remote.dto.MovieDetailsDto
 import com.karimali.movix.features.details.domain.model.MovieDetails
 
+private fun String?.nullIfBlank(): String? = this?.takeIf { it.isNotBlank() }
 
 fun MovieDetailsDto.toEntityOrNull(): MovieDetailsEntity? {
     val movieId = id ?: return null
-    val movieTitle = title?.takeIf { it.isNotBlank() } ?: return null
+    val movieTitle = title.nullIfBlank() ?: return null
     return MovieDetailsEntity(
         id = movieId,
         title = movieTitle,
-        originalTitle = originalTitle?.takeIf { it.isNotBlank() },
-        tagline = tagline?.takeIf { it.isNotBlank() },
-        overview = overview?.takeIf { it.isNotBlank() },
-        posterPath = posterPath,
-        backdropPath = backdropPath,
-        releaseDate = releaseDate?.takeIf { it.isNotBlank() },
+        originalTitle = originalTitle.nullIfBlank(),
+        tagline = tagline.nullIfBlank(),
+        overview = overview.nullIfBlank(),
+        posterPath = posterPath.nullIfBlank(),
+        backdropPath = backdropPath.nullIfBlank(),
+        releaseDate = releaseDate.nullIfBlank(),
         runtime = runtime?.takeIf { it > 0 },
         voteAverage = voteAverage,
         voteCount = voteCount,
-        status = status,
-        originalLanguage = originalLanguage,
+        status = status.nullIfBlank(),
+        originalLanguage = originalLanguage.nullIfBlank(),
         budget = budget?.takeIf { it > 0 },
         revenue = revenue?.takeIf { it > 0 },
-        homepage = homepage?.takeIf { it.isNotBlank() },
-        imdbId = imdbId?.takeIf { it.isNotBlank() },
-        collectionName = collection?.name?.takeIf { it.isNotBlank() },
-        genres = genres.orEmpty().mapNotNull { it.name?.takeIf(String::isNotBlank) },
-        productionCompanies = productionCompanies.orEmpty()
-            .mapNotNull { it.name?.takeIf(String::isNotBlank) },
-        spokenLanguages = spokenLanguages.orEmpty()
-            .mapNotNull { it.englishName?.takeIf(String::isNotBlank) },
+        homepage = homepage.nullIfBlank(),
+        imdbId = imdbId.nullIfBlank(),
+        collectionName = collection?.name.nullIfBlank(),
+        genres = genres.orEmpty().mapNotNull { it.name.nullIfBlank() },
+        productionCompanies = productionCompanies.orEmpty().mapNotNull { it.name.nullIfBlank() },
+        spokenLanguages = spokenLanguages.orEmpty().mapNotNull { it.englishName.nullIfBlank() },
     )
 }
 
@@ -47,7 +46,7 @@ fun MovieDetailsEntity.toDomain(): MovieDetails = MovieDetails(
     backdropUrl = backdropPath?.let { "${AppRouter.BACKDROP_BASE_URL}$it" },
     releaseDate = releaseDate.orEmpty(),
     runtimeMinutes = runtime,
-    rating = voteAverage ?: 0.0,
+    rating = voteAverage,
     voteCount = voteCount ?: 0,
     status = status.orEmpty(),
     originalLanguageCode = originalLanguage.orEmpty(),

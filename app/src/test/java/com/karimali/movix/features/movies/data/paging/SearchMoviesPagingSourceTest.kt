@@ -7,8 +7,8 @@ import com.karimali.movix.core.error.DomainException
 import com.karimali.movix.features.movies.data.datasource.local.MoviesLocalDataSource
 import com.karimali.movix.features.movies.data.datasource.remote.MoviesRemoteDataSource
 import com.karimali.movix.features.movies.data.datasource.remote.dto.MoviesResponseDto
-import com.karimali.movix.testutil.movieDto
-import com.karimali.movix.testutil.movieEntity
+import com.karimali.movix.core.testutil.movieDto
+import com.karimali.movix.core.testutil.movieEntity
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
