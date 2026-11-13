@@ -1,5 +1,6 @@
 package com.karimali.movix.testutil
 
+import com.karimali.movix.features.details.domain.model.MovieDetails
 import com.karimali.movix.features.movies.data.datasource.local.entity.MovieEntity
 import com.karimali.movix.features.movies.data.datasource.remote.dto.MovieDto
 import com.karimali.movix.features.movies.domain.model.Movie
@@ -54,3 +55,31 @@ fun movie(
     posterUrl: String? = "https://image.tmdb.org/t/p/w500/poster.jpg",
     releaseDate: String? = "2024-05-01",
 ) = Movie(id = id, title = title, posterUrl = posterUrl, releaseDate = releaseDate)
+
+fun movieDetails(
+    releaseDate: String? = "2024-05-10",
+): MovieDetails {
+    return MovieDetails(
+        id = 1,
+        title = "Batman",
+        originalTitle = "Batman",
+        tagline = "",
+        overview = "",
+        posterUrl = null,
+        backdropUrl = null,
+        releaseDate = releaseDate,
+        runtimeMinutes = null,
+        rating = null,
+        voteCount = 0,
+        status = "",
+        originalLanguageCode = "",
+        budget = null,
+        revenue = null,
+        homepage = null,
+        imdbUrl = null,
+        collectionName = null,
+        genres = emptyList(),
+        productionCompanies = emptyList(),
+        spokenLanguages = emptyList(),
+    )
+}
