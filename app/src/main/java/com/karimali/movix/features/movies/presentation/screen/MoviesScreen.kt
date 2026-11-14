@@ -9,16 +9,18 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
+import com.karimali.movix.R
 import com.karimali.movix.core.ui.asDomainError
+import com.karimali.movix.core.ui.components.ErrorView
+import com.karimali.movix.core.ui.components.OfflineBanner
 import com.karimali.movix.features.movies.domain.model.Movie
 import com.karimali.movix.features.movies.presentation.components.EmptyView
-import com.karimali.movix.features.movies.presentation.components.ErrorView
 import com.karimali.movix.features.movies.presentation.components.LoadingView
 import com.karimali.movix.features.movies.presentation.components.MoviesGrid
-import com.karimali.movix.features.movies.presentation.components.OfflineBanner
 import com.karimali.movix.features.movies.presentation.components.SearchField
 import com.karimali.movix.features.movies.presentation.contract.MoviesIntent
 import com.karimali.movix.features.movies.presentation.contract.MoviesState
@@ -34,18 +36,11 @@ fun MoviesScreen(
         topBar = {
             SearchField(
                 query = state.query,
-                onQueryChange = {
-                    onIntent(MoviesIntent.QueryChanged(it))
-                },
-                onClear = {
-                    onIntent(MoviesIntent.ClearQuery)
-                },
+                onQueryChange = { onIntent(MoviesIntent.QueryChanged(it)) },
+                onClear = { onIntent(MoviesIntent.ClearQuery) },
                 modifier = Modifier
                     .statusBarsPadding()
-                    .padding(
-                        horizontal = 16.dp,
-                        vertical = 8.dp
-                    ),
+                    .padding(horizontal = 16.dp, vertical = 8.dp),
             )
         },
     ) { innerPadding ->
@@ -58,38 +53,29 @@ fun MoviesScreen(
                 .padding(innerPadding)
         ) {
             when {
-                isEmpty && refresh is LoadState.Loading -> {
-                    LoadingView()
-                }
+                isEmpty && refresh is LoadState.Loading -> LoadingView()
 
-                isEmpty && refresh is LoadState.Error -> {
-                    ErrorView(
-                        error = refresh.error.asDomainError(),
-                        onRetry = movies::retry,
-                    )
-                }
+                isEmpty && refresh is LoadState.Error -> ErrorView(
+                    error = refresh.error.asDomainError(),
+                    onRetry = movies::retry,
+                )
 
-                isEmpty && refresh is LoadState.NotLoading -> {
-                    EmptyView(state.query)
-                }
+                isEmpty && refresh is LoadState.NotLoading -> EmptyView(state.query)
 
                 else -> {
-                    Column(
-                        modifier = Modifier.fillMaxSize()
-                    ) {
+                    Column(modifier = Modifier.fillMaxSize()) {
                         // Offline-first: keep cached movies visible when refresh fails.
                         if (refresh is LoadState.Error) {
                             OfflineBanner(
+                                title = stringResource(R.string.showing_saved_movies),
                                 error = refresh.error.asDomainError(),
-                                onRetry = movies::retry
+                                onRetry = movies::retry,
                             )
                         }
 
                         MoviesGrid(
                             movies = movies,
-                            onMovieClick = {
-                                onIntent(MoviesIntent.MovieClicked(it))
-                            },
+                            onMovieClick = { onIntent(MoviesIntent.MovieClicked(it)) },
                         )
                     }
                 }

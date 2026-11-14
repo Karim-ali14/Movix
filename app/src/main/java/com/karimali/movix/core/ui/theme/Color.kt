@@ -12,7 +12,9 @@ import androidx.compose.ui.graphics.Color
  *
  * This keeps the app consistent and supports light and dark themes.
  *
- * Cinematic Red palette generated using Material Theme Builder.
+ * Cinematic Blue palette. Source color: 0xFF315DA8, generated with Material Theme Builder.
+ * Light and dark use the same tonal palettes (primary blue, blue-grey secondary, gold tertiary),
+ * so the brand identity stays the same in both modes.
  */
 
 
@@ -62,47 +64,49 @@ private val lightSurfaceContainerHighest = Color(0xFFDFE3EC)
 
 
 // ---------- Dark palette ----------
+// Same tonal palettes as the light palette, read at the dark tones
+// (accent 80/20/30/90, neutral 6 and up).
 
-private val darkPrimary = Color(0xFFFFB4A9)
-private val darkOnPrimary = Color(0xFF690003)
-private val darkPrimaryContainer = Color(0xFF93000A)
-private val darkOnPrimaryContainer = Color(0xFFFFDAD5)
+private val darkPrimary = Color(0xFFADC6FF)
+private val darkOnPrimary = Color(0xFF002E69)
+private val darkPrimaryContainer = Color(0xFF0E448E)
+private val darkOnPrimaryContainer = Color(0xFFD8E2FF)
 
-private val darkSecondary = Color(0xFFE7BDB6)
-private val darkOnSecondary = Color(0xFF442925)
-private val darkSecondaryContainer = Color(0xFF5D3F3B)
-private val darkOnSecondaryContainer = Color(0xFFFFDAD5)
+private val darkSecondary = Color(0xFFB6C8DE)
+private val darkOnSecondary = Color(0xFF203243)
+private val darkSecondaryContainer = Color(0xFF37485A)
+private val darkOnSecondaryContainer = Color(0xFFD1E4FB)
 
-private val darkTertiary = Color(0xFFDEC48C)
-private val darkOnTertiary = Color(0xFF3E2E04)
-private val darkTertiaryContainer = Color(0xFF574519)
-private val darkOnTertiaryContainer = Color(0xFFFBDFA6)
+private val darkTertiary = Color(0xFFEAC077)
+private val darkOnTertiary = Color(0xFF412D00)
+private val darkTertiaryContainer = Color(0xFF5E4201)
+private val darkOnTertiaryContainer = Color(0xFFFFDEA8)
 
 private val darkError = Color(0xFFFFB4AB)
 private val darkOnError = Color(0xFF690005)
 private val darkErrorContainer = Color(0xFF93000A)
 private val darkOnErrorContainer = Color(0xFFFFDAD6)
 
-private val darkBackground = Color(0xFF1A1110)
-private val darkOnBackground = Color(0xFFF1DFDC)
+private val darkBackground = Color(0xFF121318)
+private val darkOnBackground = Color(0xFFE2E2E9)
 
-private val darkSurface = Color(0xFF1A1110)
-private val darkOnSurface = Color(0xFFF1DFDC)
-private val darkSurfaceVariant = Color(0xFF534341)
-private val darkOnSurfaceVariant = Color(0xFFD8C2BE)
+private val darkSurface = Color(0xFF121318)
+private val darkOnSurface = Color(0xFFE2E2E9)
+private val darkSurfaceVariant = Color(0xFF434751)
+private val darkOnSurfaceVariant = Color(0xFFC3C6D3)
 
-private val darkOutline = Color(0xFFA08C89)
-private val darkOutlineVariant = Color(0xFF534341)
+private val darkOutline = Color(0xFF8D909C)
+private val darkOutlineVariant = Color(0xFF434751)
 
-private val darkInverseSurface = Color(0xFFF1DFDC)
-private val darkInverseOnSurface = Color(0xFF392E2C)
-private val darkInversePrimary = Color(0xFFBB1614)
+private val darkInverseSurface = Color(0xFFE2E2E9)
+private val darkInverseOnSurface = Color(0xFF2F3036)
+private val darkInversePrimary = Color(0xFF315DA8)
 
-private val darkSurfaceContainerLowest = Color(0xFF140C0B)
-private val darkSurfaceContainerLow = Color(0xFF231918)
-private val darkSurfaceContainer = Color(0xFF271D1C)
-private val darkSurfaceContainerHigh = Color(0xFF322826)
-private val darkSurfaceContainerHighest = Color(0xFF3D3231)
+private val darkSurfaceContainerLowest = Color(0xFF0C0E13)
+private val darkSurfaceContainerLow = Color(0xFF1A1B20)
+private val darkSurfaceContainer = Color(0xFF1E1F25)
+private val darkSurfaceContainerHigh = Color(0xFF282A2F)
+private val darkSurfaceContainerHighest = Color(0xFF33353A)
 
 
 // ---------- Light Color Scheme ----------
