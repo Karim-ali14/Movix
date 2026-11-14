@@ -6,6 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
+import com.karimali.movix.features.details.presentation.screen.MovieDetailsRoute
 import com.karimali.movix.features.movies.presentation.screen.MoviesRoute
 
 @Composable
@@ -24,10 +25,11 @@ fun MovixNavHost(navController: NavHostController = rememberNavController()) {
         }
 
         composable<Screens.MovieDetailRoute> { backStackEntry ->
-            val detailRoute = backStackEntry.toRoute<Screens.MovieDetailRoute>()
-            val movieId = detailRoute.movieId
-
-
+            MovieDetailsRoute(
+                onBack = {
+                    navController.popBackStack()
+                }
+            )
         }
     }
 }
