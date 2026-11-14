@@ -1,15 +1,20 @@
-package com.karimali.movix.features.details.presentation.formatter
+package com.karimali.movix.core.util.formatter
 
+import java.text.NumberFormat
 import java.util.Locale
 
-internal fun formatRuntime(minutes: Int): String {
+fun Int.formatWithCommas(): String {
+    return NumberFormat.getNumberInstance(Locale.getDefault()).format(this)
+}
+
+fun formatRuntime(minutes: Int): String {
     val h = minutes / 60
     val m = minutes % 60
     return if (h > 0) "${h}h ${m}m" else "${m}m"
 }
 
 /** Returns null when the amount is unknown (0 or negative). */
-internal fun formatMoney(amount: Long): String? = when {
+fun formatMoney(amount: Long): String? = when {
     amount <= 0 -> null
     amount >= 1_000_000_000 -> String.format(Locale.US, "\$%.1fB", amount / 1_000_000_000.0)
     amount >= 1_000_000 -> String.format(Locale.US, "\$%.1fM", amount / 1_000_000.0)
@@ -17,7 +22,8 @@ internal fun formatMoney(amount: Long): String? = when {
     else -> "\$$amount"
 }
 
-internal fun languageName(code: String): String {
+// --- 3. تنسيق أسماء اللغات ---
+fun languageName(code: String): String {
     if (code.isBlank()) return ""
     val name = Locale.forLanguageTag(code).getDisplayLanguage(Locale.ENGLISH)
     return name.ifBlank { code.uppercase(Locale.ROOT) }

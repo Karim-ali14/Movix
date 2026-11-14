@@ -1,4 +1,4 @@
-package com.karimali.movix.features.movies.navigation
+package com.karimali.movix.core.navigation
 
 import kotlinx.serialization.Serializable
 
