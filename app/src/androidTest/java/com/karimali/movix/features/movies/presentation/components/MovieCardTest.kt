@@ -7,7 +7,7 @@ import androidx.compose.ui.test.performClick
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.karimali.movix.core.ui.theme.MovieAppTheme
 import com.karimali.movix.features.movies.domain.model.Movie
-import com.karimali.movix.testutil.movie
+import com.karimali.movix.core.testutil.movie
 import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test

@@ -134,8 +134,10 @@ fun movieDetails(
     id: Int = 1,
     title: String = "Batman",
     originalTitle: String = "Batman",
+    imdbUrl: String? = null,
+    homepage: String? = null,
     releaseDate: String? = "2024-05-10",
-): MovieDetails {
+    ): MovieDetails {
     return MovieDetails(
         id = id,
         title = title,

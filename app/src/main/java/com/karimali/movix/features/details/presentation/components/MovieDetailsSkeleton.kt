@@ -19,9 +19,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.karimali.movix.core.ui.theme.AppSpacing
+
+/** Lets UI tests assert that the loading placeholder is on screen. */
+internal const val SKELETON_TEST_TAG = "details_skeleton"
 
 // Heights of the placeholder text lines, roughly matching the real text they stand in for.
 private val TitleLineHeight = 28.dp
@@ -35,7 +39,7 @@ internal fun MovieDetailsSkeleton(modifier: Modifier = Modifier) {
     val shimmer = rememberShimmerBrush()
     val lineShape = MaterialTheme.shapes.small
 
-    Column(modifier.fillMaxSize()) {
+    Column(modifier.fillMaxSize().testTag(SKELETON_TEST_TAG)) {
         Box(
             Modifier
                 .fillMaxWidth()
