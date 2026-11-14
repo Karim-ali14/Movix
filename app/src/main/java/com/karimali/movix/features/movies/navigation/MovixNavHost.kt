@@ -5,7 +5,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.toRoute
+import com.karimali.movix.core.navigation.Screens
 import com.karimali.movix.features.details.presentation.screen.MovieDetailsRoute
 import com.karimali.movix.features.movies.presentation.screen.MoviesRoute
 

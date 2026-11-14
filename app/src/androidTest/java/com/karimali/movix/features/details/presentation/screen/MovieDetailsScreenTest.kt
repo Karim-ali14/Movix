@@ -24,9 +24,9 @@ import com.karimali.movix.features.details.presentation.components.NOT_AVAILABLE
 import com.karimali.movix.features.details.presentation.components.SKELETON_TEST_TAG
 import com.karimali.movix.features.details.presentation.contract.MovieDetailsIntent
 import com.karimali.movix.features.details.presentation.contract.MovieDetailsUiState
-import com.karimali.movix.features.details.presentation.formatter.formatMoney
-import com.karimali.movix.features.details.presentation.formatter.formatRuntime
-import com.karimali.movix.features.details.presentation.formatter.languageName
+import com.karimali.movix.core.util.formatter.formatMoney
+import com.karimali.movix.core.util.formatter.formatRuntime
+import com.karimali.movix.core.util.formatter.languageName
 import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test

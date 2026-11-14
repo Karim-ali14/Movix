@@ -14,7 +14,7 @@
     <string name="empty_search">No results for \"%1$s\"</string>
     <string name="retry">Retry</string>
     <string name="showing_saved_movies">Showing saved movies</string>
-
+    <string name="movies_title">Discover</string>
     <!-- details -->
     <string name="details_back">Back</string>
     <string name="details_retry">Retry</string>
@@ -30,9 +30,11 @@
     <string name="details_spoken_languages">Spoken languages</string>
     <string name="details_website">Website</string>
     <string name="details_imdb">IMDb</string>
-    <string name="details_votes_format">%1$d votes</string>
+    <string name="details_votes_format">%s votes</string>
     <string name="details_part_of_format">Part of %1$s</string>
     <string name="details_showing_saved">Showing saved details</string>
+    <string name="details_rating_description">Rating %1$s out of 10</string>
+    <string name="details_no_rating_description">No ratings available</string>
     <!-- shared errors (used by core/presentation/ErrorMapper.kt) -->
 
     <string name="error_movie_not_found">This movie could not be found.</string>

@@ -1,30 +1,23 @@
 package com.karimali.movix.features.movies.presentation.components
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Movie
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import coil.compose.SubcomposeAsyncImage
+import com.karimali.movix.core.ui.components.PosterImage
+import com.karimali.movix.core.ui.theme.AppSpacing
 import com.karimali.movix.features.movies.domain.model.Movie
 
 @Composable
-fun MovieCard(
+internal fun MovieCard(
     movie: Movie,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
@@ -32,7 +25,7 @@ fun MovieCard(
     Card(
         onClick = onClick,
         modifier = modifier,
-        shape = MaterialTheme.shapes.large,
+        shape = MaterialTheme.shapes.medium,
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceContainerLow
         ),
@@ -51,7 +44,7 @@ fun MovieCard(
             )
 
             Column(
-                modifier = Modifier.padding(12.dp)
+                modifier = Modifier.padding(AppSpacing.sm)
             ) {
                 Text(
                     text = movie.title,
@@ -73,46 +66,3 @@ fun MovieCard(
     }
 }
 
-@Composable
-fun PosterImage(
-    url: String?,
-    contentDescription: String?,
-    modifier: Modifier = Modifier
-) {
-    if (url.isNullOrBlank()) {
-        PosterPlaceholder(modifier)
-        return
-    }
-
-    SubcomposeAsyncImage(
-        model = url,
-        contentDescription = contentDescription,
-        contentScale = ContentScale.Crop,
-        modifier = modifier,
-        loading = {
-            PosterPlaceholder(Modifier.fillMaxSize())
-        },
-        error = {
-            PosterPlaceholder(Modifier.fillMaxSize())
-        }
-    )
-}
-
-@Composable
-private fun PosterPlaceholder(
-    modifier: Modifier = Modifier
-) {
-    Box(
-        modifier = modifier.background(
-            MaterialTheme.colorScheme.surfaceContainerHighest
-        ),
-        contentAlignment = Alignment.Center
-    ) {
-        Icon(
-            imageVector = Icons.Rounded.Movie,
-            contentDescription = null,
-            modifier = Modifier.fillMaxSize(0.25f),
-            tint = MaterialTheme.colorScheme.onSurfaceVariant
-        )
-    }
-}

@@ -13,10 +13,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import com.karimali.movix.R
 import com.karimali.movix.core.error.DomainError
 import com.karimali.movix.core.ui.asMessage
+import com.karimali.movix.core.ui.theme.AppSpacing
 
 /** Shown on top of cached content when a background refresh failed. */
 @Composable
@@ -29,23 +29,27 @@ fun OfflineBanner(
     Surface(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 8.dp, vertical = 4.dp),
+            .padding(horizontal = AppSpacing.xs, vertical = AppSpacing.xxs),
         shape = MaterialTheme.shapes.medium,
         color = MaterialTheme.colorScheme.secondaryContainer
     ) {
         Row(
-            modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
+            modifier = Modifier.padding(
+                horizontal = AppSpacing.md,
+                vertical = AppSpacing.sm
+            ),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Column(
                 modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(4.dp)
+                verticalArrangement = Arrangement.spacedBy(AppSpacing.xxs)
             ) {
                 Text(
                     text = title,
                     style = MaterialTheme.typography.labelLarge,
                     color = MaterialTheme.colorScheme.onSecondaryContainer
                 )
+
                 Text(
                     text = error.asMessage(),
                     style = MaterialTheme.typography.bodySmall,

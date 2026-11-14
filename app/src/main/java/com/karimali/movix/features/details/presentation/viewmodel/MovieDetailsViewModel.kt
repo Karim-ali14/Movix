@@ -10,7 +10,7 @@ import com.karimali.movix.features.details.domain.usecase.RefreshMovieDetailsUse
 import com.karimali.movix.features.details.presentation.contract.MovieDetailsEffect
 import com.karimali.movix.features.details.presentation.contract.MovieDetailsIntent
 import com.karimali.movix.features.details.presentation.contract.MovieDetailsUiState
-import com.karimali.movix.features.movies.navigation.Screens
+import com.karimali.movix.core.navigation.Screens
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.filterNotNull

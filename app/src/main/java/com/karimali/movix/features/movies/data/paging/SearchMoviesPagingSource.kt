@@ -3,7 +3,7 @@ package com.karimali.movix.features.movies.data.paging
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.karimali.movix.core.network.toDomainException
-import com.karimali.movix.core.util.MoviesConstants.FIRST_PAGE
+import com.karimali.movix.features.movies.data.constants.MoviePagingConstants.FIRST_PAGE
 import com.karimali.movix.features.movies.data.datasource.local.MoviesLocalDataSource
 import com.karimali.movix.features.movies.data.datasource.remote.MoviesRemoteDataSource
 import com.karimali.movix.features.movies.data.mapper.toDomain

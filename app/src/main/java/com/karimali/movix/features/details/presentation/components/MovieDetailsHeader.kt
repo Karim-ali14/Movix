@@ -14,12 +14,14 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.ZeroCornerSize
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.remember
@@ -27,22 +29,21 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
 import com.karimali.movix.R
+import com.karimali.movix.core.ui.components.PosterImage
 import com.karimali.movix.core.ui.theme.AppSpacing
+import com.karimali.movix.core.util.formatter.formatRuntime
+import com.karimali.movix.core.util.formatter.formatWithCommas
 import com.karimali.movix.features.details.domain.model.MovieDetails
-import com.karimali.movix.features.details.presentation.formatter.formatRuntime
 import java.util.Locale
 
-// Layout sizes of this screen, defined once so header and skeleton always match.
-internal val BackdropHeight = 300.dp
-internal val PosterWidth = 112.dp
-internal val RatingRingSize = 56.dp
 private val RatingRingStroke = 5.dp
 private const val PARALLAX_FACTOR = 0.5f
 
@@ -59,12 +60,11 @@ internal fun DetailsBackdrop(
         modifier = modifier
             .fillMaxWidth()
             .height(BackdropHeight)
-            .graphicsLayer { translationY = -scrollOffset() * PARALLAX_FACTOR },
+            .graphicsLayer { translationY = scrollOffset() * PARALLAX_FACTOR },
     ) {
-        AsyncImage(
-            model = movie.backdropUrl ?: movie.posterUrl,
-            contentDescription = null,
-            contentScale = ContentScale.Crop,
+        PosterImage(
+            url = movie.backdropUrl ?: movie.posterUrl,
+            contentDescription = movie.title,
             modifier = Modifier
                 .fillMaxSize()
                 .background(MaterialTheme.colorScheme.surfaceContainerHighest),
@@ -91,10 +91,9 @@ internal fun MovieHeader(movie: MovieDetails, modifier: Modifier = Modifier) {
             shape = MaterialTheme.shapes.medium,
             modifier = Modifier.width(PosterWidth),
         ) {
-            AsyncImage(
-                model = movie.posterUrl,
+            PosterImage(
+                url = movie.posterUrl,
                 contentDescription = movie.title,
-                contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .fillMaxWidth()
                     .aspectRatio(2f / 3f)
@@ -143,7 +142,7 @@ internal fun MovieHeader(movie: MovieDetails, modifier: Modifier = Modifier) {
             ) {
                 RatingRing(rating = movie.rating ?: 0.0, hasVotes = movie.voteCount > 0)
                 Text(
-                    text = stringResource(R.string.details_votes_format, movie.voteCount),
+                    text = stringResource(R.string.details_votes_format, movie.voteCount.formatWithCommas()),
                     style = MaterialTheme.typography.labelMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
@@ -173,7 +172,26 @@ internal fun RatingRing(rating: Double, hasVotes: Boolean, modifier: Modifier = 
         label = "rating",
     )
 
-    Box(modifier.size(RatingRingSize), contentAlignment = Alignment.Center) {
+    val ringColor = when {
+        !hasVotes -> MaterialTheme.colorScheme.surfaceContainerHighest
+        rating >= 7.5 -> MaterialTheme.colorScheme.primary
+        rating >= 5.0 -> MaterialTheme.colorScheme.tertiary
+        else -> MaterialTheme.colorScheme.error
+    }
+
+    val ratingText = String.format(Locale.US, "%.1f", rating)
+    val semanticsDescription = if (hasVotes) {
+        stringResource(R.string.details_rating_description, ratingText)
+    } else {
+        stringResource(R.string.details_no_rating_description)
+    }
+
+    Box(
+        modifier
+            .size(RatingRingSize)
+            .semantics { contentDescription = semanticsDescription },
+        contentAlignment = Alignment.Center
+    ) {
         CircularProgressIndicator(
             progress = { 1f },
             modifier = Modifier.fillMaxSize(),
@@ -183,11 +201,11 @@ internal fun RatingRing(rating: Double, hasVotes: Boolean, modifier: Modifier = 
         CircularProgressIndicator(
             progress = { progress },
             modifier = Modifier.fillMaxSize(),
-            color = MaterialTheme.colorScheme.tertiary,
+            color = ringColor,
             strokeWidth = RatingRingStroke,
         )
         Text(
-            text = if (hasVotes) String.format(Locale.US, "%.1f", rating) else NOT_AVAILABLE,
+            text = if (hasVotes) ratingText else NOT_AVAILABLE,
             style = MaterialTheme.typography.labelMedium,
         )
     }
