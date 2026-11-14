@@ -5,7 +5,7 @@ import androidx.paging.LoadType
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
 import com.karimali.movix.core.network.toDomainException
-import com.karimali.movix.core.util.MoviesConstants.FIRST_PAGE
+import com.karimali.movix.features.movies.data.constants.MoviePagingConstants.FIRST_PAGE
 import com.karimali.movix.features.movies.data.datasource.local.MoviesLocalDataSource
 import com.karimali.movix.features.movies.data.datasource.local.entity.MovieEntity
 import com.karimali.movix.features.movies.data.datasource.local.entity.RemoteKeysEntity

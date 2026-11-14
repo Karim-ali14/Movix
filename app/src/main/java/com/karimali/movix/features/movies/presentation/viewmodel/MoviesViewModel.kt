@@ -26,6 +26,9 @@ class MoviesViewModel @Inject constructor(
     private val searchMovies: SearchMoviesUseCase,
 ) : MviViewModel<MoviesState, MoviesIntent, MoviesEffect>(MoviesState()) {
 
+    private val browse: Flow<PagingData<Movie>> = fetchMovies().cachedIn(viewModelScope)
+
+
     @OptIn(FlowPreview::class, ExperimentalCoroutinesApi::class)
     val movies: Flow<PagingData<Movie>> = state
         .map { it.query.trim() }
@@ -33,7 +36,7 @@ class MoviesViewModel @Inject constructor(
         // Typing waits 400ms; clearing the box shows the cached list immediately.
         .debounce { query -> if (query.isEmpty()) 0L else SEARCH_DEBOUNCE_MS }
         .flatMapLatest { query ->                       // cancels the previous search
-            if (query.isEmpty()) fetchMovies() else searchMovies(query)
+            if (query.isEmpty()) browse else searchMovies(query)
         }
         .cachedIn(viewModelScope)
 

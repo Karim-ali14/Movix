@@ -14,22 +14,23 @@ import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.itemContentType
 import androidx.paging.compose.itemKey
 import com.karimali.movix.core.ui.asDomainError
+import com.karimali.movix.core.ui.components.FooterError
+import com.karimali.movix.core.ui.components.FooterLoading
+import com.karimali.movix.core.ui.theme.AppSpacing
 import com.karimali.movix.features.movies.domain.model.Movie
 
 @Composable
-fun MoviesGrid(
+internal fun MoviesGrid(
     movies: LazyPagingItems<Movie>,
     onMovieClick: (Int) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     LazyVerticalGrid(
         columns = GridCells.Adaptive(minSize = 150.dp),
-        contentPadding = PaddingValues(
-            horizontal = 16.dp,
-            vertical = 16.dp
-        ),
-        horizontalArrangement = Arrangement.spacedBy(12.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp),
-        modifier = Modifier.fillMaxSize(),
+        contentPadding = PaddingValues(AppSpacing.md),
+        horizontalArrangement = Arrangement.spacedBy(AppSpacing.sm),
+        verticalArrangement = Arrangement.spacedBy(AppSpacing.md),
+        modifier = modifier.fillMaxSize(),
     ) {
         items(
             count = movies.itemCount,
@@ -37,34 +38,15 @@ fun MoviesGrid(
             contentType = movies.itemContentType { "movie" },
         ) { index ->
             movies[index]?.let { movie ->
-                MovieCard(
-                    movie = movie,
-                    onClick = { onMovieClick(movie.id) }
-                )
+                MovieCard(movie = movie, onClick = { onMovieClick(movie.id) })
             }
         }
 
-        // Pagination footer: Loading / Error with retry at the bottom of the list.
         when (val append = movies.loadState.append) {
-            LoadState.Loading -> {
-                item(
-                    span = { GridItemSpan(maxLineSpan) }
-                ) {
-                    FooterLoading()
-                }
+            LoadState.Loading -> item(span = { GridItemSpan(maxLineSpan) }) { FooterLoading() }
+            is LoadState.Error -> item(span = { GridItemSpan(maxLineSpan) }) {
+                FooterError(error = append.error.asDomainError(), onRetry = movies::retry)
             }
-
-            is LoadState.Error -> {
-                item(
-                    span = { GridItemSpan(maxLineSpan) }
-                ) {
-                    FooterError(
-                        error = append.error.asDomainError(),
-                        onRetry = movies::retry
-                    )
-                }
-            }
-
             else -> Unit
         }
     }
