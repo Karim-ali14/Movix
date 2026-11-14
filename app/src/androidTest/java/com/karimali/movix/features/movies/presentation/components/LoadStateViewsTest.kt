@@ -4,12 +4,17 @@ import androidx.compose.ui.semantics.ProgressBarRangeInfo
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.hasProgressBarRangeInfo
 import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.karimali.movix.R
 import com.karimali.movix.core.error.DomainError
+import com.karimali.movix.core.ui.components.ErrorView
+import com.karimali.movix.core.ui.components.FooterError
+import com.karimali.movix.core.ui.components.FooterLoading
+import com.karimali.movix.core.ui.components.OfflineBanner
 import com.karimali.movix.core.ui.theme.MovieAppTheme
 import org.junit.Assert.assertTrue
 import org.junit.Rule
@@ -26,12 +31,16 @@ class LoadStateViewsTest {
     private val retryLabel get() = context.getString(R.string.retry)
 
     @Test
-    fun loadingView_showsProgressIndicator() {
+    fun moviesListSkeleton_isDisplayed() {
         // Arrange
-        composeRule.setContent { MovieAppTheme { LoadingView() } }
+        composeRule.setContent {
+            MovieAppTheme {
+                MoviesListSkeleton()
+            }
+        }
 
         // Act & Assert
-        composeRule.onNode(hasProgressBarRangeInfo(ProgressBarRangeInfo.Indeterminate)).assertIsDisplayed()
+        composeRule.onNodeWithTag(MOVIES_SKELETON_TEST_TAG).assertIsDisplayed()
     }
 
     @Test
@@ -39,7 +48,11 @@ class LoadStateViewsTest {
         // Arrange
         var retried = false
         composeRule.setContent {
-            MovieAppTheme { ErrorView(error = DomainError.NoInternet, onRetry = { retried = true }) }
+            MovieAppTheme {
+                ErrorView(
+                    error = DomainError.NoInternet,
+                    onRetry = { retried = true })
+            }
         }
 
         // Act
@@ -97,8 +110,15 @@ class LoadStateViewsTest {
     fun offlineBanner_showsSavedMoviesNoticeMessageAndRetry() {
         // Arrange
         var retried = false
+        val expectedTitle = "Showing saved movies"
         composeRule.setContent {
-            MovieAppTheme { OfflineBanner(error = DomainError.NoInternet, onRetry = { retried = true }) }
+            MovieAppTheme {
+                OfflineBanner(
+                    error = DomainError.NoInternet,
+                    onRetry = { retried = true },
+                    title = expectedTitle,
+                )
+            }
         }
 
         // Act
