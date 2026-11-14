@@ -16,8 +16,8 @@ import com.karimali.movix.R
 import com.karimali.movix.core.ui.theme.AppSpacing
 import com.karimali.movix.features.details.domain.model.MovieDetails
 import com.karimali.movix.features.details.presentation.contract.MovieDetailsIntent
-import com.karimali.movix.features.details.presentation.formatter.formatMoney
-import com.karimali.movix.features.details.presentation.formatter.languageName
+import com.karimali.movix.core.util.formatter.formatMoney
+import com.karimali.movix.core.util.formatter.languageName
 
 /** Shown wherever a value is unknown. */
 internal const val NOT_AVAILABLE = "–"
@@ -112,22 +112,26 @@ private fun LabeledText(title: String, value: String) {
 }
 
 /** Website / IMDb buttons; each one appears only when the movie has that link. */
+/** Website / IMDb buttons; each one appears only when the movie has a non-blank link. */
 @Composable
 internal fun LinksRow(
     movie: MovieDetails,
     onIntent: (MovieDetailsIntent) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    if (movie.homepage == null && movie.imdbUrl == null) return
+    val hasWebsite = !movie.homepage.isNullOrBlank()
+    val hasImdb = !movie.imdbUrl.isNullOrBlank()
+
+    if (!hasWebsite && !hasImdb) return
 
     Row(modifier = modifier, horizontalArrangement = Arrangement.spacedBy(AppSpacing.sm)) {
-        if (movie.homepage != null) {
+        if (hasWebsite) {
             OutlinedButton(
                 onClick = { onIntent(MovieDetailsIntent.WebsiteClicked) },
                 modifier = Modifier.weight(1f),
             ) { Text(stringResource(R.string.details_website)) }
         }
-        if (movie.imdbUrl != null) {
+        if (hasImdb) {
             OutlinedButton(
                 onClick = { onIntent(MovieDetailsIntent.ImdbClicked) },
                 modifier = Modifier.weight(1f),
