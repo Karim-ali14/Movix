@@ -23,7 +23,7 @@ import com.karimali.movix.core.ui.theme.MovieAppTheme
 import com.karimali.movix.features.movies.domain.model.Movie
 import com.karimali.movix.features.movies.presentation.contract.MoviesIntent
 import com.karimali.movix.features.movies.presentation.contract.MoviesState
-import com.karimali.movix.testutil.movie
+import com.karimali.movix.core.testutil.movie
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import org.junit.Assert.assertEquals

@@ -1,7 +1,7 @@
 package com.karimali.movix.features.movies.data.mapper
 
 import com.karimali.movix.core.network.AppRouter
-import com.karimali.movix.testutil.movieDto
+import com.karimali.movix.core.testutil.movieDto
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Test

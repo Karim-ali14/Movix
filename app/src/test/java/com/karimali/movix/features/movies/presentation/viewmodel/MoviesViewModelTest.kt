@@ -7,7 +7,7 @@ import com.karimali.movix.features.movies.domain.usecase.SearchMoviesUseCase
 import com.karimali.movix.features.movies.presentation.contract.MoviesEffect
 import com.karimali.movix.features.movies.presentation.contract.MoviesIntent
 import com.karimali.movix.features.movies.presentation.contract.MoviesState
-import com.karimali.movix.testutil.MainDispatcherRule
+import com.karimali.movix.core.testutil.MainDispatcherRule
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
