@@ -14,7 +14,14 @@ val localProperties = Properties().apply {
         file.inputStream().use(::load)
     }
 }
+val apiBaseUrl = localProperties.getProperty(
+    "api.base.url",
+    "https://api.themoviedb.org/3/"
+)
 
+require(apiBaseUrl.endsWith("/")) {
+    "api.base.url must end with '/' (got: $apiBaseUrl)"
+}
 val accessToken = localProperties.getProperty(
     "tmdb.access.token",
     ""
@@ -42,6 +49,12 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
+
+        buildConfigField(
+            "String",
+            "BASE_URL",
+            apiBaseUrl.toBuildConfigString()
+        )
 
         buildConfigField(
             "String",
