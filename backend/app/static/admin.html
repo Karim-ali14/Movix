@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Movix Admin</title>
+<style>
+  :root { --bg:#f7f8fc; --fg:#191c24; --muted:#444956; --card:#fff; --line:#c4c9d5; --primary:#315da8; --error:#ba1a1a; }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg:#121318; --fg:#e2e2e9; --muted:#c3c6d3; --card:#1e1f25; --line:#434751; --primary:#adc6ff; --error:#ffb4ab; }
+  }
+  * { box-sizing: border-box; }
+  body { margin:0; font:15px/1.5 system-ui, sans-serif; background:var(--bg); color:var(--fg); }
+  header, main { max-width:960px; margin:0 auto; padding:16px; }
+  header { display:flex; gap:12px; align-items:center; justify-content:space-between; flex-wrap:wrap; }
+  h1 { margin:0; font-size:1.4rem; }
+  input, textarea, button { font:inherit; color:inherit; background:var(--card); border:1px solid var(--line); border-radius:8px; padding:8px 10px; }
+  button { cursor:pointer; background:var(--primary); color:var(--bg); border-color:var(--primary); }
+  button.secondary { background:transparent; color:var(--fg); border-color:var(--line); }
+  button:disabled { opacity:.5; cursor:default; }
+  form.row { display:flex; gap:8px; margin-bottom:12px; }
+  form.row input { flex:1; }
+  table { width:100%; border-collapse:collapse; background:var(--card); border-radius:8px; overflow:hidden; }
+  th, td { text-align:left; padding:10px; border-bottom:1px solid var(--line); }
+  nav { display:flex; gap:12px; align-items:center; justify-content:center; margin:12px 0; }
+  dialog { width:min(520px, 92vw); background:var(--card); color:var(--fg); border:1px solid var(--line); border-radius:12px; }
+  dialog label { display:block; margin:10px 0 4px; color:var(--muted); font-size:.85rem; }
+  dialog input, dialog textarea { width:100%; }
+  .actions { display:flex; gap:8px; justify-content:flex-end; margin-top:16px; }
+  #status { min-height:1.4em; color:var(--error); }
+  #status.ok { color:var(--primary); }
+</style>
+</head>
+<body>
+<header>
+  <h1>Movix Admin</h1>
+  <input id="adminKey" type="password" placeholder="Admin key (if configured)" autocomplete="off">
+</header>
+<main>
+  <form id="searchForm" class="row">
+    <input id="query" type="search" placeholder="Search by title">
+    <button type="submit">Search</button>
+  </form>
+  <p id="listStatus" role="status"></p>
+  <table>
+    <thead><tr><th>ID</th><th>Title</th><th>Release</th><th>Rating</th><th></th></tr></thead>
+    <tbody id="rows"></tbody>
+  </table>
+  <nav>
+    <button id="prev" class="secondary" type="button">Previous</button>
+    <span id="pageInfo"></span>
+    <button id="next" class="secondary" type="button">Next</button>
+  </nav>
+</main>
+
+<dialog id="editor">
+  <form id="editForm">
+    <h2 id="editorTitle">Edit movie</h2>
+    <label for="fTitle">Title</label>
+    <input id="fTitle" required maxlength="500">
+    <label for="fOverview">Overview</label>
+    <textarea id="fOverview" rows="5"></textarea>
+    <label for="fTagline">Tagline</label>
+    <input id="fTagline">
+    <label for="fRelease">Release date</label>
+    <input id="fRelease" type="date">
+    <label for="fRating">Rating (0-10)</label>
+    <input id="fRating" type="number" min="0" max="10" step="0.1">
+    <p id="status" role="status"></p>
+    <div class="actions">
+      <button id="cancel" class="secondary" type="button">Cancel</button>
+      <button id="save" type="submit">Save</button>
+    </div>
+  </form>
+</dialog>
+
+<script>
+const $ = (id) => document.getElementById(id);
+const state = { page: 1, totalPages: 1, query: "", editingId: null };
+
+function headers(json) {
+  const h = {};
+  if (json) h["Content-Type"] = "application/json";
+  const key = $("adminKey").value;
+  if (key) h["X-Admin-Key"] = key;
+  return h;
+}
+
+function errorText(body, fallback) {
+  if (!body || body.detail === undefined) return fallback;
+  return typeof body.detail === "string" ? body.detail : JSON.stringify(body.detail);
+}
+
+async function loadList() {
+  const base = state.query
+    ? `/search/movie?query=${encodeURIComponent(state.query)}&page=${state.page}`
+    : `/discover/movie?page=${state.page}`;
+  $("listStatus").textContent = "Loading...";
+  try {
+    const res = await fetch(base);
+    const body = await res.json();
+    if (!res.ok) throw new Error(errorText(body, "Request failed"));
+    state.totalPages = body.total_pages;
+    render(body.results);
+    $("listStatus").textContent = body.total_results === 0 ? "No movies found." : "";
+  } catch (e) {
+    $("listStatus").textContent = e.message;
+  }
+  $("pageInfo").textContent = `Page ${state.page} of ${Math.max(state.totalPages, 1)}`;
+  $("prev").disabled = state.page <= 1;
+  $("next").disabled = state.page >= state.totalPages;
+}
+
+function render(movies) {
+  const rows = $("rows");
+  rows.replaceChildren();
+  for (const m of movies) {
+    const tr = document.createElement("tr");
+    const cells = [m.id, m.title, m.release_date || "-", m.vote_average != null ? Number(m.vote_average).toFixed(1) : "-"];
+    for (const value of cells) {
+      const td = document.createElement("td");
+      td.textContent = value;
+      tr.appendChild(td);
+    }
+    const action = document.createElement("td");
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "secondary";
+    btn.textContent = "Edit";
+    btn.addEventListener("click", () => openEditor(m.id));
+    action.appendChild(btn);
+    tr.appendChild(action);
+    rows.appendChild(tr);
+  }
+}
+
+async function openEditor(id) {
+  const res = await fetch(`/movie/${id}`);
+  const m = await res.json();
+  if (!res.ok) { $("listStatus").textContent = errorText(m, "Could not load movie"); return; }
+  state.editingId = id;
+  $("editorTitle").textContent = `Edit #${id}`;
+  $("fTitle").value = m.title || "";
+  $("fOverview").value = m.overview || "";
+  $("fTagline").value = m.tagline || "";
+  $("fRelease").value = m.release_date || "";
+  $("fRating").value = m.vote_average ?? "";
+  setStatus("", false);
+  $("editor").showModal();
+}
+
+function setStatus(text, ok) {
+  $("status").textContent = text;
+  $("status").className = ok ? "ok" : "";
+}
+
+$("editForm").addEventListener("submit", async (event) => {
+  event.preventDefault();
+  const payload = { title: $("fTitle").value.trim(), overview: $("fOverview").value, tagline: $("fTagline").value };
+  if ($("fRelease").value) payload.release_date = $("fRelease").value;
+  if ($("fRating").value !== "") payload.vote_average = Number($("fRating").value);
+
+  $("save").disabled = true;
+  try {
+    const res = await fetch(`/movie/${state.editingId}`, {
+      method: "PATCH", headers: headers(true), body: JSON.stringify(payload),
+    });
+    const body = await res.json();
+    if (!res.ok) throw new Error(errorText(body, "Save failed"));
+    $("editor").close();
+    loadList();
+  } catch (e) {
+    setStatus(e.message, false);
+  } finally {
+    $("save").disabled = false;
+  }
+});
+
+$("cancel").addEventListener("click", () => $("editor").close());
+$("searchForm").addEventListener("submit", (e) => { e.preventDefault(); state.query = $("query").value.trim(); state.page = 1; loadList(); });
+$("prev").addEventListener("click", () => { state.page -= 1; loadList(); });
+$("next").addEventListener("click", () => { state.page += 1; loadList(); });
+
+loadList();
+</script>
+</body>
+</html>
