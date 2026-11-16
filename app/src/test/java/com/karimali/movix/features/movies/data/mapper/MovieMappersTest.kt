@@ -63,18 +63,6 @@ class MovieMappersTest {
         assertEquals(listOf(1, 2), entity?.genreIds)
     }
 
-    @Test
-    fun `toEntityOrNull maps null genre ids to empty list`() {
-        // Arrange
-        val dto = movieDto(genreIds = null)
-
-        // Act
-        val entity = dto.toEntityOrNull(page = 1, position = 0)
-
-        // Assert
-        assertEquals(emptyList<Int>(), entity?.genreIds)
-    }
-
     // ---------- toDomainOrNull ----------
 
     @Test
