@@ -7,6 +7,7 @@ import androidx.compose.ui.test.hasProgressBarRangeInfo
 import androidx.compose.ui.test.hasSetTextAction
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
+import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
@@ -24,6 +25,7 @@ import com.karimali.movix.features.movies.domain.model.Movie
 import com.karimali.movix.features.movies.presentation.contract.MoviesIntent
 import com.karimali.movix.features.movies.presentation.contract.MoviesState
 import com.karimali.movix.core.testutil.movie
+import com.karimali.movix.features.movies.presentation.components.MOVIES_SKELETON_TEST_TAG
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import org.junit.Assert.assertEquals
@@ -101,7 +103,7 @@ class MoviesScreenTest {
         showScreen(refresh = LoadState.Loading)
 
         // Act & Assert
-        composeRule.onNode(loadingIndicator).assertIsDisplayed()
+        composeRule.onNodeWithTag(MOVIES_SKELETON_TEST_TAG).assertIsDisplayed()
     }
 
     @Test

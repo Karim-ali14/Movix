@@ -26,6 +26,7 @@ import com.karimali.movix.features.details.presentation.contract.MovieDetailsInt
 import com.karimali.movix.features.details.presentation.contract.MovieDetailsUiState
 import com.karimali.movix.core.util.formatter.formatMoney
 import com.karimali.movix.core.util.formatter.formatRuntime
+import com.karimali.movix.core.util.formatter.formatWithCommas
 import com.karimali.movix.core.util.formatter.languageName
 import org.junit.Assert.assertEquals
 import org.junit.Rule
@@ -117,7 +118,8 @@ class MovieDetailsScreenTest {
         rule.onNodeWithText(movie.tagline).assertExists()
         rule.onNodeWithText(str(R.string.details_synopsis)).assertExists()
         rule.onNodeWithText(movie.overview).assertExists()
-        rule.onNodeWithText(str(R.string.details_votes_format, 22_061)).assertExists()
+        rule.onNodeWithText(str(R.string.details_votes_format, 22_061.formatWithCommas()))
+            .assertExists()
         rule.onNodeWithText(str(R.string.details_part_of_format, "Star Wars Collection"))
             .assertExists()
     }
@@ -406,7 +408,10 @@ class MovieDetailsScreenTest {
         rule.onNodeWithText(str(R.string.details_website)).performScrollTo().performClick()
 
         // Assert
-        assertEquals(listOf<MovieDetailsIntent>(MovieDetailsIntent.WebsiteClicked), intents.toList())
+        assertEquals(
+            listOf<MovieDetailsIntent>(MovieDetailsIntent.WebsiteClicked),
+            intents.toList()
+        )
     }
 
     @Test
@@ -604,7 +609,9 @@ class MovieDetailsScreenTest {
         val state = showMutable(MovieDetailsUiState(movie = movie))
 
         // Act: refresh failed
-        rule.runOnIdle { state.value = MovieDetailsUiState(movie = movie, error = someDomainError()) }
+        rule.runOnIdle {
+            state.value = MovieDetailsUiState(movie = movie, error = someDomainError())
+        }
 
         // Assert
         rule.onNodeWithText(str(R.string.details_showing_saved)).assertIsDisplayed()
@@ -624,7 +631,9 @@ class MovieDetailsScreenTest {
         rule.onNodeWithText("Old Title").assertIsDisplayed()
 
         // Act
-        rule.runOnIdle { state.value = MovieDetailsUiState(movie = movieDetails(title = "New Title")) }
+        rule.runOnIdle {
+            state.value = MovieDetailsUiState(movie = movieDetails(title = "New Title"))
+        }
 
         // Assert
         rule.onNodeWithText("New Title").assertIsDisplayed()

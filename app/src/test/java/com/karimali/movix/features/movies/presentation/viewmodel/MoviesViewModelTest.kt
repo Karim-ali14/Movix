@@ -229,6 +229,7 @@ class MoviesViewModelTest {
         runCurrent()
 
         // Assert
-        verify(exactly = 2) { fetchMovies() }
+        verify(exactly = 1) { fetchMovies() }
+        verify(exactly = 0) { searchMovies("") }
     }
 }
