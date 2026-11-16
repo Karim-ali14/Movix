@@ -112,7 +112,7 @@ fun MovieDetailsScreen(
             DetailsTopBar(
                 title = movie?.title,
                 scrollState = scrollState,
-                isRefreshing = state.isRefreshing,
+                isRefreshing = state.isRefreshing && movie != null,
                 onBackClick = { onIntent(MovieDetailsIntent.BackClicked) },
                 modifier = Modifier.align(Alignment.TopCenter),
             )
