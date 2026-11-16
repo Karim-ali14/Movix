@@ -6,16 +6,19 @@ import com.karimali.movix.core.testutil.MOVIE_ID
 import com.karimali.movix.core.testutil.httpException
 import com.karimali.movix.core.testutil.movieDetailsDto
 import com.karimali.movix.core.testutil.movieDetailsEntity
+import com.karimali.movix.core.testutil.validDto
 import com.karimali.movix.features.details.data.datasource.local.MovieDetailsLocalDataSource
 import com.karimali.movix.features.details.data.datasource.local.entity.MovieDetailsEntity
 import com.karimali.movix.features.details.data.datasource.remote.MovieDetailsRemoteDataSource
 import com.karimali.movix.features.details.data.mapper.toDomain
+import com.karimali.movix.features.movies.data.datasource.local.MoviesLocalDataSource
 import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
+import io.mockk.runs
 import io.mockk.slot
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -37,9 +40,11 @@ class MovieDetailsRepositoryImplTest {
     private val local = mockk<MovieDetailsLocalDataSource>()
     private lateinit var repository: MovieDetailsRepositoryImpl
 
+    private val moviesLocal = mockk<MoviesLocalDataSource>(relaxed = true)
+
     @Before
     fun setUp() {
-        repository = MovieDetailsRepositoryImpl(remote, local)
+        repository = MovieDetailsRepositoryImpl(remote, local,moviesLocal)
     }
 
     private suspend fun refreshFailure(): Throwable =
@@ -339,5 +344,31 @@ class MovieDetailsRepositoryImplTest {
 
         // Assert
         assertSame(cancellation, failure)
+    }
+
+    @Test
+    fun `refresh also updates the cached list row`() = runTest {
+        // Arrange
+        coEvery { remote.fetchMovieDetails(1) } returns validDto(id = 1, title = "New title")
+
+        coEvery { local.save(any()) } just runs
+        coEvery { moviesLocal.updateCachedMovie(any()) } just runs
+
+        // Act
+        repository.refreshMovieDetails(1)
+
+        // Assert
+        coVerify {
+            moviesLocal.updateCachedMovie(match { it.id == 1 && it.title == "New title" })
+        }
+    }
+
+    @Test
+    fun `failed refresh does not touch the list cache`() = runTest {
+        coEvery { remote.fetchMovieDetails(1) } throws IOException()
+
+        runCatching { repository.refreshMovieDetails(1) }
+
+        coVerify(exactly = 0) { moviesLocal.updateCachedMovie(any()) }
     }
 }

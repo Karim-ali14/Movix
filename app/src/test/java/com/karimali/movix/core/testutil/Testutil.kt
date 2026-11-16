@@ -262,6 +262,30 @@ fun movieDetailsEntity(
     spokenLanguages = spokenLanguages,
 )
 
+fun validDto(id: Int, title: String) = MovieDetailsDto(
+    id = id,
+    title = title,
+    originalTitle = title,
+    tagline = null,
+    overview = "Overview",
+    posterPath = "/poster.jpg",
+    backdropPath = "/backdrop.jpg",
+    releaseDate = "2024-01-01",
+    runtime = 120,
+    voteAverage = 7.5,
+    voteCount = 100,
+    status = "Released",
+    originalLanguage = "en",
+    budget = null,
+    revenue = null,
+    homepage = null,
+    imdbId = null,
+    genres = emptyList(),
+    productionCompanies = emptyList(),
+    spokenLanguages = emptyList(),
+    collection = null,
+)
+
 // ============================================================================
 // NETWORK / EXCEPTION HELPERS
 // ============================================================================
