@@ -1,10 +1,11 @@
 package com.karimali.movix.features.movies.data.datasource.local
 
 import androidx.room.withTransaction
+import com.karimali.movix.core.database.MovixDatabase
 import com.karimali.movix.features.movies.data.datasource.local.dao.MoviesDao
 import com.karimali.movix.features.movies.data.datasource.local.dao.RemoteKeysDao
-import com.karimali.movix.core.database.MovixDatabase
 import com.karimali.movix.features.movies.data.datasource.local.entity.MovieEntity
+import com.karimali.movix.features.movies.data.datasource.local.entity.MovieListUpdate
 import com.karimali.movix.features.movies.data.datasource.local.entity.RemoteKeysEntity
 import javax.inject.Inject
 
@@ -33,6 +34,11 @@ class MoviesLocalDataSource @Inject constructor(
             moviesDao.insertAll(movies)
             keysDao.insertAll(keys)
         }
+    }
+
+    /** Keeps the list in sync with a fresher copy of one movie. A no-op when it is not cached. */
+    suspend fun updateCachedMovie(update: MovieListUpdate) {
+        moviesDao.updateFields(update)
     }
 
     private fun String.escapeForLike(): String =
