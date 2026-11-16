@@ -48,5 +48,7 @@ def update_movie(
 ) -> dict[str, Any]:
     movie = service.update_movie(movie_id, body.changes())
     # Runs after the response is sent, so a slow or failing push never delays the edit.
-    background_tasks.add_task(notifier.movie_updated, movie_id)
+    background_tasks.add_task(
+        notifier.movie_updated, movie_id, str(movie.get("title", "")), movie.get("poster_path")
+    )
     return movie

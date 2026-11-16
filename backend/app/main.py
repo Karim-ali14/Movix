@@ -1,3 +1,4 @@
+import logging
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, Request
@@ -18,6 +19,8 @@ async def lifespan(_: FastAPI):
 
 
 def create_app() -> FastAPI:
+    logging.basicConfig(level=logging.INFO, format="%(levelname)s:     %(name)s - %(message)s")
+
     app = FastAPI(title=get_settings().app_name, version="1.0.0", lifespan=lifespan)
     app.include_router(movies.router)
     app.include_router(admin.router)
