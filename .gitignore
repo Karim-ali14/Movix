@@ -33,3 +33,6 @@ google-services.json
 
 # Android Profiling
 *.hprof
+backend/*firebase-adminsdk*.json
+backend/.venv/
+backend/.env
