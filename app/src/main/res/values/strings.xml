@@ -39,4 +39,7 @@
 
     <string name="error_movie_not_found">This movie could not be found.</string>
 
+    <string name="notification_channel_name">Movie updates</string>
+    <string name="notification_title">Movie updated</string>
+    <string name="notification_body_format">"%1$s" was updated.</string>
 </resources>
