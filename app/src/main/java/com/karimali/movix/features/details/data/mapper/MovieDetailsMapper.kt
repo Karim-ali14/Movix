@@ -5,6 +5,7 @@ import com.karimali.movix.core.network.AppRouter.IMDB_TITLE_URL
 import com.karimali.movix.features.details.data.datasource.local.entity.MovieDetailsEntity
 import com.karimali.movix.features.details.data.datasource.remote.dto.MovieDetailsDto
 import com.karimali.movix.features.details.domain.model.MovieDetails
+import com.karimali.movix.features.movies.data.datasource.local.entity.MovieListUpdate
 
 private fun String?.nullIfBlank(): String? = this?.takeIf { it.isNotBlank() }
 
@@ -58,4 +59,16 @@ fun MovieDetailsEntity.toDomain(): MovieDetails = MovieDetails(
     genres = genres,
     productionCompanies = productionCompanies,
     spokenLanguages = spokenLanguages,
+)
+
+/** The subset of details that the movies list also shows. */
+fun MovieDetailsEntity.toListUpdate(): MovieListUpdate = MovieListUpdate(
+    id = id,
+    title = title,
+    overview = overview,
+    posterPath = posterPath,
+    backdropPath = backdropPath,
+    releaseDate = releaseDate,
+    voteAverage = voteAverage,
+    voteCount = voteCount,
 )

@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.hilt.android)
     alias(libs.plugins.ksp)
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.google.services)
 }
 val localProperties = Properties().apply {
     val file = rootProject.file("local.properties")
@@ -14,7 +15,14 @@ val localProperties = Properties().apply {
         file.inputStream().use(::load)
     }
 }
+val apiBaseUrl = localProperties.getProperty(
+    "api.base.url",
+    "https://api.themoviedb.org/3/"
+)
 
+require(apiBaseUrl.endsWith("/")) {
+    "api.base.url must end with '/' (got: $apiBaseUrl)"
+}
 val accessToken = localProperties.getProperty(
     "tmdb.access.token",
     ""
@@ -42,6 +50,12 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
+
+        buildConfigField(
+            "String",
+            "BASE_URL",
+            apiBaseUrl.toBuildConfigString()
+        )
 
         buildConfigField(
             "String",
@@ -131,4 +145,8 @@ dependencies {
     androidTestImplementation(libs.turbine)
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
+
+    // Firebase Cloud Messaging
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.messaging)
 }
