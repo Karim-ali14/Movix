@@ -16,9 +16,13 @@ from app.models.movie import Movie
 class FakeNotifier:
     def __init__(self) -> None:
         self.calls: list[int] = []
+        self.titles: list[str] = []
+        self.posters: list[str | None] = []
 
-    def movie_updated(self, movie_id: int) -> None:
+    def movie_updated(self, movie_id: int, title: str, poster_path: str | None = None) -> None:
         self.calls.append(movie_id)
+        self.titles.append(title)
+        self.posters.append(poster_path)
 
 
 @pytest.fixture
