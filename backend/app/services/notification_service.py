@@ -9,18 +9,18 @@ EVENT_MOVIE_UPDATED = "movie_updated"
 
 
 class MovieNotifier(Protocol):
-    def movie_updated(self, movie_id: int) -> None: ...
+    def movie_updated(self, movie_id: int, title: str, poster_path: str | None = None) -> None: ...
 
 
 class LoggingNotifier:
     """Used when Firebase is not configured: the event is only logged."""
 
-    def movie_updated(self, movie_id: int) -> None:
-        logger.info("FCM disabled. Would notify: movie %s updated", movie_id)
+    def movie_updated(self, movie_id: int, title: str, poster_path: str | None = None) -> None:
+        logger.info("FCM disabled. Would notify: movie %s (%s) updated", movie_id, title)
 
 
 class FcmNotifier:
-    """Sends a data-only message to a topic, so the app can refresh its cache silently."""
+    """Sends a data message to a topic. The app refreshes its cache and shows the notification itself."""
 
     def __init__(self, credentials_path: str, topic: str) -> None:
         import firebase_admin
@@ -30,12 +30,16 @@ class FcmNotifier:
             firebase_admin.initialize_app(credentials.Certificate(credentials_path))
         self._topic = topic
 
-    def movie_updated(self, movie_id: int) -> None:
+    def movie_updated(self, movie_id: int, title: str, poster_path: str | None = None) -> None:
         from firebase_admin import messaging
+
+        data = {"type": EVENT_MOVIE_UPDATED, "movieId": str(movie_id), "movieTitle": title}
+        if poster_path:  # FCM data values must be strings, so the key is simply left out when unknown.
+            data["posterPath"] = poster_path
 
         message = messaging.Message(
             topic=self._topic,
-            data={"type": EVENT_MOVIE_UPDATED, "movieId": str(movie_id)},
+            data=data,
             android=messaging.AndroidConfig(priority="high"),
         )
         try:
